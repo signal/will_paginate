@@ -76,10 +76,18 @@ module WillPaginate
         WillPaginate::Collection.create(page, per_page, total_entries) do |pager|
           count_options = options.except :page, :per_page, :total_entries, :finder
           find_options = count_options.except(:count).update(:offset => pager.offset, :limit => pager.per_page) 
-          
-          args << find_options
-          # @options_from_last_find = nil
-          pager.replace(send(finder, *args) { |*a| yield(*a) if block_given? })
+
+          if respond_to?(:proxy_reflection) && !proxy_reflection.options[:finder_sql].nil?
+            sql = @finder_sql
+            sql += sanitize_sql [" LIMIT ?", pager.per_page]
+            sql += sanitize_sql [" OFFSET ?", pager.offset]
+
+            pager.replace(send("find_by_sql", sql) { |*a| yield(*a) if block_given? })
+          else
+            args << find_options
+            # @options_from_last_find = nifl
+            pager.replace(send(finder, *args) { |*a| yield(*a) if block_given? })
+          end
           
           # magic counting for user convenience:
           pager.total_entries = wp_count(count_options, args, finder) unless pager.total_entries
