@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name    = 'will_paginate'
+  s.name    = 'jwood-will_paginate'
   s.version = '2.3.11'
   s.date    = '2009-06-02'
   
