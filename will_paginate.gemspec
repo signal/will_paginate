@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-  s.name    = 'jwood-will_paginate'
-  s.version = '2.3.11'
+  s.name    = 'will_paginate'
+  s.version = '2.3.12'
   s.date    = '2009-06-02'
   
   s.summary = "Most awesome pagination solution for Rails"
